@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/konway.iml" filepath="$PROJECT_DIR$/.idea/modules/konway.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/konway_main.iml" filepath="$PROJECT_DIR$/.idea/modules/konway_main.iml" group="konway" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/konway_test.iml" filepath="$PROJECT_DIR$/.idea/modules/konway_test.iml" group="konway" />
+    </modules>
+  </component>
+</project>
