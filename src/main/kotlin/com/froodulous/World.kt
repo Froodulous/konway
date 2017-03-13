@@ -2,23 +2,15 @@ package com.froodulous
 
 import java.util.*
 
-class Rules(val bornNumbers: Set<Int>, val surviveNumbers: Set<Int>)
-
-data class Cell(val alive: Boolean = false, val age: Int = 0) {
-    override fun equals(other: Any?): Boolean {
-        return other is Cell && alive == other.alive
-    }
-
-    override fun hashCode(): Int {
-        return alive.hashCode()
-    }
-
-    override fun toString(): String {
-        return if (alive) "#" else "."
-    }
-}
-
-data class World(val cells: Array<Array<Cell>>) {
+/**
+ * Class representing a world within which the cells exist.
+ *
+ * @param cells The 2-dimensional array of Cells to initialise the world.
+ * @param wrapWorld Whether to allow the world to "wrap" in a toroidal fashion. If false, all cells outside of the range
+ * of the provided cells is considered permanently dead.
+ */
+data class World(val cells: Array<Array<Cell>>, val wrapWorld: Boolean = true) {
+    // TODO: validate/sanitise the input cells
     val width = cells.size
     val height = cells[0].size
 
@@ -47,21 +39,26 @@ data class World(val cells: Array<Array<Cell>>) {
     }
 }
 
-fun Rules.survives(numNeighbours: Int) = bornNumbers.contains(numNeighbours) || surviveNumbers.contains(numNeighbours)
-
-fun Rules.born(numNeighbours: Int) = bornNumbers.contains(numNeighbours)
-
+/**
+ * Evolve this World one step according to the provided Rules.
+ *
+ * @param rules The rules to determine how to evolve the World.
+ * @return A new World representing the World after evolving.
+ */
 fun World.evolve(rules: Rules): World {
     val newCells = Array(size = width, init = { Array(height, { Cell() }) })
     for (x in 0..width - 1) {
         for (y in 0..height - 1) {
-            newCells[x][y] = cells[x][y].evolve(getNumNeighboursWrapped(x, y), rules)
+            newCells[x][y] = cells[x][y].evolve(getNumNeighbours(x, y), rules)
         }
     }
-    return World(newCells)
+    return World(newCells, wrapWorld)
 }
 
-fun World.getNumNeighboursBounded(x: Int, y: Int): Int {
+private fun World.getNumNeighbours(x: Int, y: Int): Int =
+        if (this.wrapWorld) getNumNeighboursWrapped(x, y) else getNumNeighboursBounded(x, y)
+
+private fun World.getNumNeighboursBounded(x: Int, y: Int): Int {
     val xRange = x - 1..x + 1
     val yRange = y - 1..y + 1
     return xRange.flatMap { x -> yRange.map { y -> Pair(x, y) } }
@@ -75,7 +72,7 @@ fun World.getNumNeighboursBounded(x: Int, y: Int): Int {
             .count()
 }
 
-fun World.getNumNeighboursWrapped(x: Int, y: Int): Int {
+private fun World.getNumNeighboursWrapped(x: Int, y: Int): Int {
     val xRange = x - 1..x + 1
     val yRange = y - 1..y + 1
     return xRange.flatMap { x -> yRange.map { y -> Pair(x, y) } }
@@ -89,15 +86,17 @@ fun World.getNumNeighboursWrapped(x: Int, y: Int): Int {
 
 fun wrapCoordinate(coordinate: Int, limit: Int) = Math.floorMod(coordinate, limit)
 
-fun Cell.evolve(numNeighbours: Int, rules: Rules): Cell {
-    if (alive) {
-        if (rules.survives(numNeighbours)) {
-            return Cell(true, age + 1)
-        }
-    } else {
-        if (rules.born(numNeighbours)) {
-            return Cell(true)
-        }
-    }
-    return Cell()
+/**
+ * Create a World from a String.
+ *
+ * @param input The String to parse into a World.
+ * @param wrapWorld Whether the resulting World should Wrap toroidally.
+ */
+fun worldFromString(input: String, wrapWorld: Boolean = true): World {
+    val cellArray = input.lines().map {
+        it.map {
+            Cell(alive = it != '.')
+        }.toTypedArray()
+    }.toTypedArray()
+    return World(cellArray, wrapWorld)
 }

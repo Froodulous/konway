@@ -11,12 +11,22 @@ fun main(args: Array<String>) {
     cells[2][2] = Cell(alive = true)
     cells[3][2] = Cell(alive = true)
 
-    var world = World(cells)
-    val rules = Rules(setOf(3), setOf(2))
-
+    var world = worldFromString("............\n" +
+            "..#.........\n" +
+            "...#........\n" +
+            ".###........\n" +
+            "............\n" +
+            "............\n" +
+            "............\n" +
+            "............\n" +
+            "............\n" +
+            "............\n" +
+            "............\n" +
+            "............")
+    val rules = Rules(bornNumbers = setOf(3), surviveNumbers = setOf(2))
 
     for (i in 0..100) {
-        printState(world, i)
+        printState(world, step = i)
         world = world.evolve(rules)
     }
 }
@@ -25,4 +35,3 @@ private fun printState(world: World, step: Int) {
     println("Step $step, Current World:")
     println(world)
 }
-

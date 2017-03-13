@@ -21,32 +21,6 @@ class KonwayTest {
     }
 
     @Test
-    fun testCanGetNumNeighboursWrapped() {
-        val cells = Array(2, { Array(2, { Cell() }) })
-        cells[0][0] = Cell(alive = true)
-
-        val world = World(cells)
-
-        assertEquals(0, world.getNumNeighboursWrapped(0, 0))
-        assertEquals(1, world.getNumNeighboursWrapped(0, 1))
-        assertEquals(1, world.getNumNeighboursWrapped(1, 0))
-        assertEquals(1, world.getNumNeighboursWrapped(1, 1))
-    }
-
-    @Test
-    fun testCanGetNumNeighboursBounded() {
-        val cells = Array(2, { Array(2, { Cell() }) })
-        cells[0][0] = Cell(alive = true)
-
-        val world = World(cells)
-
-        assertEquals(0, world.getNumNeighboursBounded(0, 0))
-        assertEquals(1, world.getNumNeighboursBounded(0, 1))
-        assertEquals(1, world.getNumNeighboursBounded(1, 0))
-        assertEquals(1, world.getNumNeighboursBounded(1, 1))
-    }
-
-    @Test
     fun testRulesAreAppliedCorrectly() {
         val cells = Array(2, { Array(2, { Cell() }) })
         cells[0][0] = Cell(alive = true)
@@ -64,6 +38,52 @@ class KonwayTest {
     }
 
     @Test
+    fun testCanCreateWorldFromString() {
+        val worldFromString = worldFromString("#.\n..")
+
+        val expectedCells = arrayOf(arrayOf(Cell(true), Cell()), arrayOf(Cell(), Cell()))
+        val expectedWorld = World(expectedCells)
+        assertEquals(expectedWorld, worldFromString)
+    }
+
+    @Test
+    fun testWorldIsWrapped() {
+
+        val world = worldFromString(".###.\n" +
+                ".....\n" +
+                ".....\n" +
+                ".....\n" +
+                ".....")
+        val rules = Rules(bornNumbers = setOf(3), surviveNumbers = setOf(2))
+
+        val expectedWorld = worldFromString("..#..\n" +
+                "..#..\n" +
+                ".....\n" +
+                ".....\n" +
+                "..#..")
+
+        assertEquals(expectedWorld, world.evolve(rules))
+    }
+
+    @Test
+    fun testWorldIsNotWrapped() {
+        val world = worldFromString(".###.\n" +
+                ".....\n" +
+                ".....\n" +
+                ".....\n" +
+                ".....", wrapWorld = false)
+        val rules = Rules(bornNumbers = setOf(3), surviveNumbers = setOf(2))
+
+        val expectedWorld = worldFromString("..#..\n" +
+                "..#..\n" +
+                ".....\n" +
+                ".....\n" +
+                ".....", wrapWorld = false)
+
+        assertEquals(expectedWorld, world.evolve(rules))
+    }
+
+    @Test
     fun testCanCreateOscillator() {
         val cells = Array(2, { Array(2, { Cell() }) })
         cells[0][0] = Cell(alive = true)
@@ -77,7 +97,7 @@ class KonwayTest {
         val expectedCells = arrayOf(arrayOf(Cell(true), Cell()), arrayOf(Cell(), Cell()))
         val expectedWorld = World(expectedCells)
 
-        print (evolvedWorld)
+        print(evolvedWorld)
         assertEquals(expectedWorld, evolvedWorld)
     }
 }
