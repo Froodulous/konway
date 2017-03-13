@@ -6,11 +6,13 @@ package com.froodulous
  */
 fun main(args: Array<String>) {
 
-    val cells = Array(2, { Array(2, { Cell() }) })
-    cells[0][0] = Cell(alive = true)
+    val cells = Array(5, { Array(5, { Cell() }) })
+    cells[1][2] = Cell(alive = true)
+    cells[2][2] = Cell(alive = true)
+    cells[3][2] = Cell(alive = true)
 
     var world = World(cells)
-    val rules = Rules(setOf(1, 3), emptySet())
+    val rules = Rules(setOf(3), setOf(2))
 
 
     for (i in 0..100) {
