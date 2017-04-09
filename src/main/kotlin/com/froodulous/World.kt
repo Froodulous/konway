@@ -10,7 +10,14 @@ import java.util.*
  * of the provided cells is considered permanently dead.
  */
 data class World(val cells: Array<Array<Cell>>, val wrapWorld: Boolean = true) {
-    // TODO: validate/sanitise the input cells
+    init {
+        cells.forEachIndexed { index, row ->
+            if (row.size != cells[0].size) throw IllegalArgumentException(
+                    "Attempted to create world from cells: $cells, " +
+                            "but row $index is not the same length as row 0")
+        }
+    }
+
     val width = cells.size
     val height = cells[0].size
 
