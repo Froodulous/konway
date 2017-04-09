@@ -3,7 +3,7 @@ version '1.0-SNAPSHOT'
 
 buildscript {
     ext {
-        kotlinVersion = '1.1.0'
+        kotlinVersion = '1.1.1'
         springBootVersion = '1.4.3.RELEASE'
     }
 
@@ -38,6 +38,7 @@ repositories {
 dependencies {
     compile('org.springframework.boot:spring-boot-starter')
     compile("org.jetbrains.kotlin:kotlin-stdlib:${kotlinVersion}")
+    compile("no.tornado:tornadofx:1.7.0")
     testCompile('org.springframework.boot:spring-boot-starter-test')
 }
 
