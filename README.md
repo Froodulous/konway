@@ -1,3 +1,3 @@
-#Konway
+# Konway
 
-##A Kotlin implementation of Conway's Game of Life
+## A Kotlin implementation of Conway's Game of Life
