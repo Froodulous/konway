@@ -1,6 +1,6 @@
 package com.froodulous
 
-import org.junit.Assert.*
+import org.junit.Assert.assertEquals
 import org.junit.Test
 
 /**
@@ -27,7 +27,7 @@ class KonwayTest {
 
         val initialWorld = World(cells)
 
-        val rules = Rules(bornNumbers = setOf(1), surviveNumbers = emptySet())
+        val rules = Rules(bornNumbers = setOf(1), surviveNumbers = setOf(1))
 
         val expectedCells = arrayOf(arrayOf(Cell(), Cell(true)), arrayOf(Cell(true), Cell(true)))
 
@@ -54,7 +54,7 @@ class KonwayTest {
                 ".....\n" +
                 ".....\n" +
                 ".....")
-        val rules = Rules(bornNumbers = setOf(3), surviveNumbers = setOf(2))
+        val rules = Rules(bornNumbers = setOf(3), surviveNumbers = setOf(2, 3))
 
         val expectedWorld = worldFromString("..#..\n" +
                 "..#..\n" +
@@ -72,7 +72,7 @@ class KonwayTest {
                 ".....\n" +
                 ".....\n" +
                 ".....", wrapWorld = false)
-        val rules = Rules(bornNumbers = setOf(3), surviveNumbers = setOf(2))
+        val rules = Rules(bornNumbers = setOf(3), surviveNumbers = setOf(2, 3))
 
         val expectedWorld = worldFromString("..#..\n" +
                 "..#..\n" +
@@ -90,7 +90,7 @@ class KonwayTest {
 
         val initialWorld = World(cells)
 
-        val rules = Rules(bornNumbers = setOf(1, 3), surviveNumbers = emptySet())
+        val rules = Rules(bornNumbers = setOf(1, 3), surviveNumbers = setOf(1, 3))
 
         val evolvedWorld = initialWorld.evolve(rules).evolve(rules)
 

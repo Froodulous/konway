@@ -23,10 +23,11 @@ fun main(args: Array<String>) {
             "............\n" +
             "............\n" +
             "............")
-    val rules = Rules(bornNumbers = setOf(3), surviveNumbers = setOf(2))
+    val rules = Rules(bornNumbers = setOf(3), surviveNumbers = setOf(2, 3))
 
     for (i in 0..100) {
         printState(world, step = i)
+        Thread.sleep(100L)
         world = world.evolve(rules)
     }
 }
